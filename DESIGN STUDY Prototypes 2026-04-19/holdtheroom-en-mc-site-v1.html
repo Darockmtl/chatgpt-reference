@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hold the Room — EN MC Conversion Site — Design Study 2026-04-19</title>
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5f5e5a;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  body { margin: 0; padding: 2rem; background: #e8e4da; font-family: var(--font-sans); }
+  .htr-wrap { font-family: var(--font-sans); color: var(--color-text-primary); line-height: 1.6; max-width: 960px; margin: 0 auto; background: #fff; border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .htr-wrap * { box-sizing: border-box; }
+  .htr-topbar { background: #0a0a0a; color: #d4d0c8; padding: 14px 24px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; }
+  .htr-topbar-wordmark { font-family: var(--font-serif); font-size: 15px; font-weight: 500; color: #f4f1ea; letter-spacing: 0; }
+  .htr-topbar-nav { display: flex; gap: 18px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; align-items: center; }
+  .htr-topbar-nav a { color: #8ab5a8; text-decoration: none; cursor: pointer; }
+  .htr-book-btn { padding: 7px 14px; background: #8ab5a8; color: #0a2e26; border: none; border-radius: var(--border-radius-md); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; cursor: pointer; }
+  .htr-hero { background: #0a2e26; color: #f4f1ea; padding: 3rem 2rem; }
+  .htr-hero-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; }
+  .htr-hero-headline { font-family: var(--font-serif); font-size: 42px; font-weight: 500; line-height: 1.1; margin: 0 0 1.25rem; letter-spacing: -0.02em; color: #f4f1ea; max-width: 600px; }
+  .htr-hero-tagline { font-size: 17px; line-height: 1.55; color: #d4d0c8; margin: 0 0 2rem; max-width: 560px; }
+  .htr-reel-container { background: #000; border-radius: var(--border-radius-lg); aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; position: relative; margin: 0 0 2rem; border: 0.5px solid rgba(138, 181, 168, 0.3); max-width: 760px; }
+  .htr-reel-play { width: 72px; height: 72px; border-radius: 50%; background: rgba(138, 181, 168, 0.9); display: flex; align-items: center; justify-content: center; color: #0a2e26; cursor: pointer; }
+  .htr-reel-label { position: absolute; bottom: 14px; left: 16px; font-size: 11px; letter-spacing: 0.1em; color: #8ab5a8; text-transform: uppercase; background: rgba(10,46,38,0.85); padding: 5px 10px; border-radius: var(--border-radius-md); }
+  .htr-hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .htr-btn { padding: 11px 22px; border: 0.5px solid #8ab5a8; color: #f4f1ea; background: transparent; font-size: 12px; letter-spacing: 0.1em; border-radius: var(--border-radius-md); text-transform: uppercase; cursor: pointer; font-family: var(--font-sans); }
+  .htr-btn-primary { background: #8ab5a8; color: #0a2e26; border-color: #8ab5a8; font-weight: 500; }
+  .htr-hero-meta { font-size: 12px; color: #8ab5a8; letter-spacing: 0.05em; }
+  .htr-argument { background: #0a0a0a; color: #f4f1ea; padding: 3rem 2rem; }
+  .htr-argument-inner { max-width: 680px; }
+  .htr-argument-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; }
+  .htr-argument-headline { font-family: var(--font-serif); font-size: 30px; font-weight: 500; line-height: 1.2; margin: 0 0 1.5rem; letter-spacing: -0.01em; color: #f4f1ea; }
+  .htr-argument-body { font-size: 16px; line-height: 1.65; color: #d4d0c8; margin: 0 0 1rem; }
+  .htr-argument-accent { color: #8ab5a8; font-weight: 500; }
+  .htr-services { background: #f4f1ea; color: #1a1a1a; padding: 3.5rem 2rem; }
+  .htr-services-inner { max-width: 820px; }
+  .htr-services-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #5f5e5a; text-transform: uppercase; margin: 0 0 1rem; }
+  .htr-services-headline { font-family: var(--font-serif); font-size: 32px; font-weight: 500; line-height: 1.15; margin: 0 0 2rem; color: #1a1a1a; letter-spacing: -0.01em; }
+  .htr-services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .htr-service-card { padding: 1.5rem; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.1); border-radius: var(--border-radius-lg); }
+  .htr-service-icon { width: 32px; height: 32px; background: #0a2e26; border-radius: var(--border-radius-md); margin-bottom: 14px; display: flex; align-items: center; justify-content: center; color: #8ab5a8; font-family: var(--font-serif); font-size: 14px; font-weight: 500; }
+  .htr-service-title { font-size: 17px; font-weight: 500; margin: 0 0 8px; color: #1a1a1a; }
+  .htr-service-body { font-size: 13px; line-height: 1.55; color: #5f5e5a; margin: 0 0 10px; }
+  .htr-service-examples { font-size: 11px; letter-spacing: 0.05em; color: #0a2e26; text-transform: uppercase; font-weight: 500; }
+  .htr-proof { background: #0a0a0a; color: #f4f1ea; padding: 3.5rem 2rem; }
+  .htr-proof-inner { max-width: 900px; }
+  .htr-proof-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; }
+  .htr-proof-headline { font-family: var(--font-serif); font-size: 32px; font-weight: 500; line-height: 1.15; margin: 0 0 2rem; color: #f4f1ea; letter-spacing: -0.01em; }
+  .htr-proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .htr-proof-card { padding: 1.5rem; background: rgba(255,255,255,0.04); border: 0.5px solid rgba(138, 181, 168, 0.2); border-radius: var(--border-radius-lg); }
+  .htr-proof-label { font-size: 11px; letter-spacing: 0.18em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 12px; font-weight: 500; }
+  .htr-proof-quote { font-family: var(--font-serif); font-size: 15px; line-height: 1.5; margin: 0 0 12px; color: #f4f1ea; font-style: italic; }
+  .htr-proof-cite { font-size: 11px; color: #8ab5a8; letter-spacing: 0.05em; line-height: 1.5; }
+  .htr-process { background: #133d32; color: #f4f1ea; padding: 3.5rem 2rem; }
+  .htr-process-inner { max-width: 820px; }
+  .htr-process-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; }
+  .htr-process-headline { font-family: var(--font-serif); font-size: 30px; font-weight: 500; line-height: 1.15; margin: 0 0 2rem; color: #f4f1ea; letter-spacing: -0.01em; }
+  .htr-process-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .htr-process-card { padding: 1.25rem; background: rgba(255,255,255,0.04); border: 0.5px solid rgba(138, 181, 168, 0.25); border-radius: var(--border-radius-lg); }
+  .htr-process-num { font-family: var(--font-serif); font-size: 28px; font-weight: 500; color: #8ab5a8; margin: 0 0 6px; line-height: 1; }
+  .htr-process-title { font-size: 14px; font-weight: 500; margin: 0 0 8px; color: #f4f1ea; letter-spacing: 0.05em; text-transform: uppercase; }
+  .htr-process-body { font-size: 13px; line-height: 1.5; color: #d4d0c8; margin: 0; }
+  .htr-logos { background: #f4f1ea; color: #1a1a1a; padding: 3rem 2rem; }
+  .htr-logos-inner { max-width: 900px; }
+  .htr-logos-label { font-size: 11px; letter-spacing: 0.25em; color: #5f5e5a; text-transform: uppercase; margin: 0 0 1.25rem; text-align: center; }
+  .htr-logo-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: center; }
+  .htr-logo-placeholder { height: 50px; background: #ffffff; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #5f5e5a; letter-spacing: 0.05em; text-align: center; padding: 4px; border: 0.5px solid rgba(0,0,0,0.08); }
+  .htr-agency { background: #0a0a0a; color: #f4f1ea; padding: 3rem 2rem; text-align: center; }
+  .htr-agency-inner { max-width: 540px; margin: 0 auto; }
+  .htr-agency-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; }
+  .htr-agency-headline { font-family: var(--font-serif); font-size: 26px; font-weight: 500; line-height: 1.2; margin: 0 0 1rem; color: #f4f1ea; letter-spacing: -0.01em; }
+  .htr-agency-body { font-size: 14px; line-height: 1.6; color: #d4d0c8; margin: 0 0 1.5rem; }
+  .htr-book { background: #0a2e26; color: #f4f1ea; padding: 3.5rem 2rem; }
+  .htr-book-inner { max-width: 680px; margin: 0 auto; }
+  .htr-book-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; text-align: center; }
+  .htr-book-headline { font-family: var(--font-serif); font-size: 34px; font-weight: 500; line-height: 1.15; margin: 0 0 1.25rem; color: #f4f1ea; letter-spacing: -0.01em; text-align: center; }
+  .htr-book-sub { font-size: 15px; line-height: 1.6; color: #d4d0c8; margin: 0 0 2rem; text-align: center; }
+  .htr-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .htr-form-full { grid-column: 1 / -1; }
+  .htr-form-field { display: flex; flex-direction: column; gap: 6px; }
+  .htr-form-label { font-size: 11px; letter-spacing: 0.1em; color: #8ab5a8; text-transform: uppercase; }
+  .htr-form-input, .htr-form-textarea, .htr-form-select { padding: 11px 14px; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(138, 181, 168, 0.4); border-radius: var(--border-radius-md); color: #f4f1ea; font-size: 14px; font-family: var(--font-sans); }
+  .htr-form-textarea { min-height: 90px; resize: vertical; }
+  .htr-form-submit { grid-column: 1 / -1; margin-top: 10px; }
+  .htr-footer { background: #000; color: #8ab5a8; padding: 1.5rem 2rem; text-align: center; font-size: 11px; letter-spacing: 0.08em; }
+  .htr-footer a { color: #d4d0c8; text-decoration: none; }
+  @media (max-width: 640px) {
+    body { padding: 0; }
+    .htr-hero-headline { font-size: 28px; }
+    .htr-argument-headline, .htr-services-headline, .htr-proof-headline, .htr-book-headline { font-size: 24px; }
+    .htr-services-grid, .htr-proof-grid, .htr-form { grid-template-columns: 1fr; }
+    .htr-process-steps { grid-template-columns: 1fr; }
+    .htr-logo-strip { grid-template-columns: repeat(3, 1fr); }
+    .htr-topbar-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="htr-wrap">
+
+  <div class="htr-topbar">
+    <span class="htr-topbar-wordmark">HOLD THE ROOM</span>
+    <nav class="htr-topbar-nav">
+      <a>Services</a>
+      <a>Work</a>
+      <a>Process</a>
+      <a>FR</a>
+      <button class="htr-book-btn">Book Anthony</button>
+    </nav>
+  </div>
+
+  <section class="htr-hero">
+    <p class="htr-hero-eyebrow">Bilingual MC &middot; Canada &middot; 20+ years</p>
+    <h1 class="htr-hero-headline">The MC who holds your room so you don't have to.</h1>
+    <p class="htr-hero-tagline">Anthony Horng &mdash; corporate events, galas, conferences, bilingual events. Trained as a Certified Event Designer (CED Level 3). Fluent in English and Québécois French.</p>
+    <div class="htr-reel-container">
+      <div class="htr-reel-label">SIZZLE REEL &middot; 2026</div>
+      <div class="htr-reel-play">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
+    <div class="htr-hero-cta">
+      <button class="htr-btn htr-btn-primary">Check my date</button>
+      <button class="htr-btn">Download one-pager</button>
+      <span class="htr-hero-meta">&middot; Typical response within 24h</span>
+    </div>
+  </section>
+
+  <section class="htr-argument">
+    <div class="htr-argument-inner">
+      <p class="htr-argument-eyebrow">Why this matters</p>
+      <h2 class="htr-argument-headline">Most MCs perfect their craft on the stage. <span class="htr-argument-accent">I live in the event.</span></h2>
+      <p class="htr-argument-body">The difference isn't personality or polish. It's scope. An MC who lives on the stage speaks one language &mdash; performance. An MC who lives in the event speaks the whole thing &mdash; stage, audience design, production logistics, message intent, the moments between the moments.</p>
+      <p class="htr-argument-body">That's what keeps your event from feeling like a series of segments with transitions in between. When your credibility is on the line &mdash; in front of your team, your executives, your partners, your members &mdash; you don't need a presenter. <span class="htr-argument-accent">You need someone who makes the whole room feel held.</span></p>
+    </div>
+  </section>
+
+  <section class="htr-services">
+    <div class="htr-services-inner">
+      <p class="htr-services-eyebrow">Services</p>
+      <h2 class="htr-services-headline">Four kinds of rooms I hold.</h2>
+      <div class="htr-services-grid">
+        <div class="htr-service-card">
+          <div class="htr-service-icon">01</div>
+          <h3 class="htr-service-title">Corporate events</h3>
+          <p class="htr-service-body">Internal meetings, leadership summits, employee kickoffs, town halls, product launches. The rooms where your culture shows up.</p>
+          <p class="htr-service-examples">TELUS Health &middot; Sushi Shop &middot; iA Financial</p>
+        </div>
+        <div class="htr-service-card">
+          <div class="htr-service-icon">02</div>
+          <h3 class="htr-service-title">Galas &amp; awards</h3>
+          <p class="htr-service-body">Recognition nights, fundraisers, annual benefits. Rooms where pacing, tone, and emotional arc are the whole point.</p>
+          <p class="htr-service-examples">Moisson Laurentides &middot; Boréa Construction</p>
+        </div>
+        <div class="htr-service-card">
+          <div class="htr-service-icon">03</div>
+          <h3 class="htr-service-title">Bilingual events</h3>
+          <p class="htr-service-body">EN/FR audiences in one room. Not translation &mdash; two rooms held at once, so neither language group checks out.</p>
+          <p class="htr-service-examples">Skills Canada &middot; MTY Group &middot; Canada Day</p>
+        </div>
+        <div class="htr-service-card">
+          <div class="htr-service-icon">04</div>
+          <h3 class="htr-service-title">Conferences &amp; summits</h3>
+          <p class="htr-service-body">Multi-day, multi-track events with speakers, panels, breakouts. The connective tissue between every segment.</p>
+          <p class="htr-service-examples">Industry associations &middot; National summits</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="htr-proof">
+    <div class="htr-proof-inner">
+      <p class="htr-proof-eyebrow">The work</p>
+      <h2 class="htr-proof-headline">What planners say after the room.</h2>
+      <div class="htr-proof-grid">
+        <div class="htr-proof-card">
+          <p class="htr-proof-label">On listening</p>
+          <p class="htr-proof-quote">"You don't just deliver your script. You really listen to what's happening on stage, so you can pick up the elements and bring them back out. It's a major differentiator."</p>
+          <p class="htr-proof-cite">CHANELLE TURGEON GERVAIS<br/>Communications &middot; Boréa Construction</p>
+        </div>
+        <div class="htr-proof-card">
+          <p class="htr-proof-label">On trust</p>
+          <p class="htr-proof-quote">"After interviewing many professionals, I selected Anthony because of his professionalism, humble attitude, intellect, and his ability to energize the room."</p>
+          <p class="htr-proof-cite">LINKEDIN RECOMMENDATION<br/>Corporate event</p>
+        </div>
+        <div class="htr-proof-card">
+          <p class="htr-proof-label">On carrying the room</p>
+          <p class="htr-proof-quote">"His contagious energy, sense of timing, and ability to capture attention contributed significantly to the success of the event."</p>
+          <p class="htr-proof-cite">MOISSON LAURENTIDES<br/>Le Grand Bedon</p>
+        </div>
+        <div class="htr-proof-card">
+          <p class="htr-proof-label">On the whole experience</p>
+          <p class="htr-proof-quote">"A true ally for any event that combines professionalism, dynamism, and genuine connection with the audience."</p>
+          <p class="htr-proof-cite">MOISSON LAURENTIDES<br/>Post-event</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="htr-process">
+    <div class="htr-process-inner">
+      <p class="htr-process-eyebrow">How this works</p>
+      <h2 class="htr-process-headline">Three phases. No surprises.</h2>
+      <div class="htr-process-steps">
+        <div class="htr-process-card">
+          <p class="htr-process-num">01</p>
+          <p class="htr-process-title">Discover</p>
+          <p class="htr-process-body">We meet before you commit. I ask what the event is actually trying to do, who's in the room, what the turning points are. You get a sense of the thinking. No charge, no pressure.</p>
+        </div>
+        <div class="htr-process-card">
+          <p class="htr-process-num">02</p>
+          <p class="htr-process-title">Design</p>
+          <p class="htr-process-body">Once booked, I work with you to shape the arc. Script writing, stage direction input, flow review. Your team and your speakers stay in charge of their content &mdash; I shape how it lands.</p>
+        </div>
+        <div class="htr-process-card">
+          <p class="htr-process-num">03</p>
+          <p class="htr-process-title">Deliver</p>
+          <p class="htr-process-body">Event day, I hold the room. Your runsheet runs. Your speakers feel supported. Your audience stays with you from start to finish.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="htr-logos">
+    <div class="htr-logos-inner">
+      <p class="htr-logos-label">Twenty years of rooms</p>
+      <div class="htr-logo-strip">
+        <div class="htr-logo-placeholder">MUDGIRL</div>
+        <div class="htr-logo-placeholder">SKILLS CANADA</div>
+        <div class="htr-logo-placeholder">TELUS HEALTH</div>
+        <div class="htr-logo-placeholder">SUSHI SHOP</div>
+        <div class="htr-logo-placeholder">BORÉA</div>
+        <div class="htr-logo-placeholder">iA FINANCIAL</div>
+        <div class="htr-logo-placeholder">MTY GROUP</div>
+        <div class="htr-logo-placeholder">CANADA DAY</div>
+        <div class="htr-logo-placeholder">MOISSON L.</div>
+        <div class="htr-logo-placeholder">TEDx</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="htr-agency">
+    <div class="htr-agency-inner">
+      <p class="htr-agency-eyebrow">For agencies &amp; producers</p>
+      <h2 class="htr-agency-headline">Need assets to circulate to your client?</h2>
+      <p class="htr-agency-body">One-pagers, reel in multiple formats, logo pack, and a short bio. Everything you need to pass along without writing it yourself.</p>
+      <button class="htr-btn htr-btn-primary">Download the producer kit</button>
+    </div>
+  </section>
+
+  <section class="htr-book">
+    <div class="htr-book-inner">
+      <p class="htr-book-eyebrow">Let's talk</p>
+      <h2 class="htr-book-headline">Check my date.</h2>
+      <p class="htr-book-sub">Tell me about your event. I'll reply within a business day with availability and a next-step conversation.</p>
+      <form class="htr-form">
+        <div class="htr-form-field">
+          <label class="htr-form-label">Name</label>
+          <input class="htr-form-input" type="text" placeholder="Your name"/>
+        </div>
+        <div class="htr-form-field">
+          <label class="htr-form-label">Organization</label>
+          <input class="htr-form-input" type="text" placeholder="Company or org"/>
+        </div>
+        <div class="htr-form-field">
+          <label class="htr-form-label">Email</label>
+          <input class="htr-form-input" type="email" placeholder="you@org.com"/>
+        </div>
+        <div class="htr-form-field">
+          <label class="htr-form-label">Event date</label>
+          <input class="htr-form-input" type="text" placeholder="When?"/>
+        </div>
+        <div class="htr-form-field">
+          <label class="htr-form-label">Event type</label>
+          <select class="htr-form-select">
+            <option>Corporate event</option>
+            <option>Gala or awards</option>
+            <option>Bilingual event</option>
+            <option>Conference or summit</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="htr-form-field">
+          <label class="htr-form-label">Audience size</label>
+          <select class="htr-form-select">
+            <option>Under 100</option>
+            <option>100&ndash;500</option>
+            <option>500&ndash;1500</option>
+            <option>1500+</option>
+          </select>
+        </div>
+        <div class="htr-form-field htr-form-full">
+          <label class="htr-form-label">What's the event trying to do?</label>
+          <textarea class="htr-form-textarea" placeholder="One or two sentences on the goal and anything else I should know"></textarea>
+        </div>
+        <div class="htr-form-submit">
+          <button class="htr-btn htr-btn-primary" style="width: 100%; padding: 14px;">Send inquiry</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="htr-footer">
+    HOLDTHEROOM.COM &middot; ANTHONY HORNG &middot; MONTRÉAL &middot; <a>FR version &rarr;</a>
+  </footer>
+
+</div>
+</body>
+</html>

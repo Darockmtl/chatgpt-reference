@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthony Horng — Practitioner Home v3 — Design Study 2026-04-19</title>
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5f5e5a;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  body { margin: 0; padding: 2rem; background: #e8e4da; font-family: var(--font-sans); }
+  .ahp-wrap { font-family: var(--font-sans); color: var(--color-text-primary); line-height: 1.6; max-width: 960px; margin: 0 auto; background: #fff; border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .ahp-wrap * { box-sizing: border-box; }
+  .ahp-topbar { background: #0a0a0a; color: #d4d0c8; padding: 14px 24px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; }
+  .ahp-topbar-wordmark { font-family: var(--font-serif); font-size: 16px; font-weight: 500; color: #f4f1ea; letter-spacing: 0; }
+  .ahp-topbar-nav { display: flex; gap: 20px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; }
+  .ahp-topbar-nav a { color: #8ab5a8; text-decoration: none; cursor: pointer; }
+  .ahp-hero { background: #0a2e26; color: #f4f1ea; padding: 4rem 2rem 3.5rem; position: relative; }
+  .ahp-hero-inner { max-width: 720px; }
+  .ahp-hero-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1.5rem; }
+  .ahp-hero-wordmark { font-family: var(--font-serif); font-size: 72px; font-weight: 500; letter-spacing: -0.03em; line-height: 0.95; margin: 0 0 1.5rem; color: #f4f1ea; }
+  .ahp-hero-tagline { font-size: 26px; font-weight: 400; line-height: 1.25; margin: 0 0 2rem; color: #f4f1ea; max-width: 560px; }
+  .ahp-hero-tagline .ahp-accent { color: #8ab5a8; font-weight: 500; }
+  .ahp-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .ahp-btn { padding: 11px 22px; border: 0.5px solid #8ab5a8; color: #f4f1ea; background: transparent; font-size: 12px; letter-spacing: 0.1em; border-radius: var(--border-radius-md); text-transform: uppercase; cursor: pointer; font-family: var(--font-sans); }
+  .ahp-btn-primary { background: #8ab5a8; color: #0a2e26; border-color: #8ab5a8; font-weight: 500; }
+  .ahp-argument { background: #0a0a0a; color: #f4f1ea; padding: 4rem 2rem; }
+  .ahp-argument-inner { max-width: 720px; }
+  .ahp-argument-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1.5rem; }
+  .ahp-argument-headline { font-family: var(--font-serif); font-size: 44px; font-weight: 500; line-height: 1.1; margin: 0 0 2rem; letter-spacing: -0.01em; color: #f4f1ea; }
+  .ahp-argument-body { font-size: 17px; line-height: 1.65; color: #d4d0c8; margin: 0 0 1.25rem; }
+  .ahp-argument-body .ahp-accent { color: #8ab5a8; font-weight: 500; }
+  .ahp-argument-punch { font-family: var(--font-serif); font-size: 22px; line-height: 1.35; color: #f4f1ea; margin: 2rem 0 0; font-style: italic; border-left: 2px solid #8ab5a8; padding-left: 1.25rem; }
+  .ahp-method { background: #133d32; color: #f4f1ea; padding: 4rem 2rem; }
+  .ahp-method-inner { max-width: 760px; }
+  .ahp-method-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; }
+  .ahp-method-headline { font-family: var(--font-serif); font-size: 36px; font-weight: 500; line-height: 1.1; margin: 0 0 0.5rem; color: #f4f1ea; letter-spacing: -0.01em; }
+  .ahp-method-credential { font-size: 12px; letter-spacing: 0.1em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 2rem; }
+  .ahp-method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .ahp-method-card { padding: 1.5rem; background: rgba(255,255,255,0.04); border: 0.5px solid rgba(138, 181, 168, 0.25); border-radius: var(--border-radius-lg); }
+  .ahp-method-num { font-family: var(--font-serif); font-size: 36px; font-weight: 500; color: #8ab5a8; margin: 0 0 8px; line-height: 1; }
+  .ahp-method-title { font-family: var(--font-serif); font-size: 20px; font-weight: 500; margin: 0 0 10px; color: #f4f1ea; }
+  .ahp-method-body { font-size: 14px; line-height: 1.55; color: #d4d0c8; margin: 0; }
+  .ahp-origin { background: #f4f1ea; color: #1a1a1a; padding: 4rem 2rem; }
+  .ahp-origin-inner { max-width: 680px; }
+  .ahp-origin-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #5f5e5a; text-transform: uppercase; margin: 0 0 1.25rem; }
+  .ahp-origin-headline { font-family: var(--font-serif); font-size: 36px; font-weight: 500; line-height: 1.15; margin: 0 0 1.75rem; letter-spacing: -0.01em; color: #1a1a1a; }
+  .ahp-origin-body { font-size: 17px; line-height: 1.7; color: #2c2c2a; margin: 0 0 1.25rem; }
+  .ahp-origin-body .ahp-origin-accent { color: #0a2e26; font-weight: 500; }
+  .ahp-proof { background: #0a0a0a; color: #f4f1ea; padding: 4rem 2rem; }
+  .ahp-proof-inner { max-width: 900px; }
+  .ahp-proof-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1rem; }
+  .ahp-proof-headline { font-family: var(--font-serif); font-size: 36px; font-weight: 500; line-height: 1.1; margin: 0 0 2.5rem; letter-spacing: -0.01em; color: #f4f1ea; }
+  .ahp-proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .ahp-proof-card { padding: 1.5rem; background: rgba(255,255,255,0.04); border: 0.5px solid rgba(138, 181, 168, 0.2); border-radius: var(--border-radius-lg); }
+  .ahp-proof-label { font-size: 11px; letter-spacing: 0.18em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 12px; font-weight: 500; }
+  .ahp-proof-quote { font-family: var(--font-serif); font-size: 16px; line-height: 1.5; margin: 0 0 12px; color: #f4f1ea; font-style: italic; }
+  .ahp-proof-cite { font-size: 11px; color: #8ab5a8; letter-spacing: 0.05em; line-height: 1.5; }
+  .ahp-logos { background: #0a0a0a; color: #f4f1ea; padding: 0 2rem 4rem; }
+  .ahp-logos-inner { max-width: 900px; }
+  .ahp-logos-label { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1.25rem; text-align: center; }
+  .ahp-logo-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; align-items: center; }
+  .ahp-logo-placeholder { height: 46px; background: rgba(255,255,255,0.05); border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #8ab5a8; letter-spacing: 0.05em; text-align: center; padding: 4px; border: 0.5px solid rgba(138, 181, 168, 0.15); }
+  .ahp-routes { background: #f4f1ea; color: #1a1a1a; padding: 4rem 2rem; }
+  .ahp-routes-inner { max-width: 820px; }
+  .ahp-routes-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #5f5e5a; text-transform: uppercase; margin: 0 0 1rem; }
+  .ahp-routes-headline { font-family: var(--font-serif); font-size: 36px; font-weight: 500; line-height: 1.1; margin: 0 0 2rem; letter-spacing: -0.01em; color: #1a1a1a; }
+  .ahp-route-card { padding: 1.5rem 1.75rem; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.1); border-radius: var(--border-radius-lg); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; }
+  .ahp-route-left h3 { font-size: 17px; font-weight: 500; margin: 0 0 6px; color: #1a1a1a; }
+  .ahp-route-left p { font-size: 14px; line-height: 1.5; color: #5f5e5a; margin: 0; }
+  .ahp-route-right { display: flex; gap: 8px; flex-shrink: 0; }
+  .ahp-route-link { padding: 8px 14px; border: 0.5px solid #0a2e26; color: #0a2e26; background: transparent; font-size: 11px; letter-spacing: 0.08em; border-radius: var(--border-radius-md); text-transform: uppercase; cursor: pointer; }
+  .ahp-orbit { background: #0a2e26; color: #f4f1ea; padding: 3.5rem 2rem; text-align: center; }
+  .ahp-orbit-inner { max-width: 520px; margin: 0 auto; }
+  .ahp-orbit-headline { font-family: var(--font-serif); font-size: 32px; font-weight: 500; line-height: 1.15; margin: 0 0 1rem; color: #f4f1ea; letter-spacing: -0.01em; }
+  .ahp-orbit-sub { font-size: 15px; line-height: 1.6; color: #d4d0c8; margin: 0 0 1.75rem; }
+  .ahp-orbit-form { display: flex; gap: 8px; }
+  .ahp-orbit-input { flex: 1; padding: 12px 14px; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(138, 181, 168, 0.4); border-radius: var(--border-radius-md); color: #f4f1ea; font-size: 14px; font-family: var(--font-sans); }
+  .ahp-footer { background: #0a0a0a; color: #8ab5a8; padding: 1.75rem 2rem; text-align: center; font-size: 11px; letter-spacing: 0.08em; }
+  .ahp-footer-lang { color: #d4d0c8; font-size: 11px; margin-top: 8px; }
+  @media (max-width: 640px) {
+    body { padding: 0; }
+    .ahp-hero-wordmark { font-size: 48px; }
+    .ahp-hero-tagline { font-size: 20px; }
+    .ahp-argument-headline, .ahp-method-headline, .ahp-proof-headline, .ahp-origin-headline, .ahp-routes-headline { font-size: 26px; }
+    .ahp-argument-body, .ahp-origin-body { font-size: 16px; }
+    .ahp-method-grid, .ahp-proof-grid { grid-template-columns: 1fr; }
+    .ahp-logo-strip { grid-template-columns: repeat(3, 1fr); }
+    .ahp-route-card { flex-direction: column; align-items: flex-start; }
+    .ahp-topbar-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="ahp-wrap">
+
+  <div class="ahp-topbar">
+    <span class="ahp-topbar-wordmark">Anthony Horng</span>
+    <nav class="ahp-topbar-nav">
+      <a>About</a>
+      <a>Worldview</a>
+      <a>Work</a>
+      <a>FR</a>
+    </nav>
+  </div>
+
+  <section class="ahp-hero">
+    <div class="ahp-hero-inner">
+      <p class="ahp-hero-eyebrow">Strategic Host &middot; Story Designer &middot; Impact Speaker</p>
+      <h1 class="ahp-hero-wordmark">Anthony<br/>Horng</h1>
+      <p class="ahp-hero-tagline">Most MCs live on the stage.<br/><span class="ahp-accent">I live in the event.</span></p>
+      <div class="ahp-cta-row">
+        <button class="ahp-btn ahp-btn-primary">Watch the reel</button>
+        <button class="ahp-btn">Read the worldview</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="ahp-argument">
+    <div class="ahp-argument-inner">
+      <p class="ahp-argument-eyebrow">The worldview</p>
+      <h2 class="ahp-argument-headline">Communication isn't a delivery problem. It's a design problem.</h2>
+      <p class="ahp-argument-body">Most events treat the MC as a runsheet executor &mdash; someone who keeps things on time, warms the room, and hands off to the real content. That's a category of MC. It's not this one.</p>
+      <p class="ahp-argument-body">Most MCs perfect their craft <em>on the stage</em> &mdash; energy, voice, presence, personality. Their language is performance. The stage is their world and their limit.</p>
+      <p class="ahp-argument-body">The MC who lives in the event speaks a different set of languages. Stage, yes &mdash; but also <span class="ahp-accent">event design, audience architecture, technical production, message intent.</span></p>
+      <p class="ahp-argument-punch">That scope difference isn't a style choice. It's a category difference. And most organizations are solving the wrong problem.</p>
+    </div>
+  </section>
+
+  <section class="ahp-method">
+    <div class="ahp-method-inner">
+      <p class="ahp-method-eyebrow">The methodology</p>
+      <h2 class="ahp-method-headline">Discover. Design. Deliver.</h2>
+      <p class="ahp-method-credential">Certified Event Designer &middot; CED Level 3</p>
+      <div class="ahp-method-grid">
+        <div class="ahp-method-card">
+          <p class="ahp-method-num">01</p>
+          <h3 class="ahp-method-title">Discover</h3>
+          <p class="ahp-method-body">What is the event actually trying to do? Who's in the audience, what are they carrying in, what are the turning points that need to land?</p>
+        </div>
+        <div class="ahp-method-card">
+          <p class="ahp-method-num">02</p>
+          <h3 class="ahp-method-title">Design</h3>
+          <p class="ahp-method-body">Shape the conditions, not the outcome. The script isn't there to be delivered &mdash; it's there to be known so well you can abandon it without losing the event.</p>
+        </div>
+        <div class="ahp-method-card">
+          <p class="ahp-method-num">03</p>
+          <h3 class="ahp-method-title">Deliver</h3>
+          <p class="ahp-method-body">Enter the system, don't manage it from outside. Listen to what the room is actually doing. Let the structure serve the moment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ahp-origin">
+    <div class="ahp-origin-inner">
+      <p class="ahp-origin-eyebrow">How this pattern became visible</p>
+      <h2 class="ahp-origin-headline">Twenty years across every industry you can think of.</h2>
+      <p class="ahp-origin-body">Combat sports ring announcing. National construction summits. Financial services galas. Corporate franchise conventions. Virtual events during the pandemic years. Philanthropic fundraisers. Weddings.</p>
+      <p class="ahp-origin-body">Not one domain expertise. Communication was the only credential I ever brought into any of those rooms.</p>
+      <p class="ahp-origin-body">That pattern &mdash; across twenty years and industries that had nothing in common &mdash; is what eventually made the argument visible. <span class="ahp-origin-accent">The room doesn't need another domain expert. The domain expertise is already there. What the room needs is the outside frame &mdash; the question nobody inside the problem can still see.</span></p>
+      <p class="ahp-origin-body">That's the work. On stage, designing the arc, holding the room. And increasingly, off stage &mdash; teaching it to people who want to build the same capacity for their own rooms.</p>
+    </div>
+  </section>
+
+  <section class="ahp-proof">
+    <div class="ahp-proof-inner">
+      <p class="ahp-proof-eyebrow">The work</p>
+      <h2 class="ahp-proof-headline">What clients say after the room.</h2>
+      <div class="ahp-proof-grid">
+        <div class="ahp-proof-card">
+          <p class="ahp-proof-label">On listening</p>
+          <p class="ahp-proof-quote">"Tu ne fais pas juste ton script. Tu écoutes réellement ce qui se passe sur scène pour être capable après ça de ressortir les éléments. C'est un gros point de différenciateur."</p>
+          <p class="ahp-proof-cite">CHANELLE TURGEON GERVAIS<br/>Communications &middot; Boréa Construction</p>
+        </div>
+        <div class="ahp-proof-card">
+          <p class="ahp-proof-label">On trust</p>
+          <p class="ahp-proof-quote">"After interviewing many professionals, I selected Anthony because of his professionalism, humble attitude, intellect, and his ability to energize the room."</p>
+          <p class="ahp-proof-cite">LINKEDIN RECOMMENDATION<br/>Wedding MC engagement</p>
+        </div>
+        <div class="ahp-proof-card">
+          <p class="ahp-proof-label">On carrying the room</p>
+          <p class="ahp-proof-quote">"Son énergie contagieuse, son sens du timing et sa capacité à capter l'attention ont grandement contribué au succès de l'événement."</p>
+          <p class="ahp-proof-cite">MOISSON LAURENTIDES<br/>Le Grand Bedon</p>
+        </div>
+        <div class="ahp-proof-card">
+          <p class="ahp-proof-label">On the unseen work</p>
+          <p class="ahp-proof-quote">"Un véritable allié pour tout événement qui cherche à combiner professionnalisme, dynamisme et proximité avec le public."</p>
+          <p class="ahp-proof-cite">MOISSON LAURENTIDES<br/>Post-event testimonial</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ahp-logos">
+    <div class="ahp-logos-inner">
+      <p class="ahp-logos-label">Twenty years of rooms</p>
+      <div class="ahp-logo-strip">
+        <div class="ahp-logo-placeholder">MUDGIRL</div>
+        <div class="ahp-logo-placeholder">SKILLS CANADA</div>
+        <div class="ahp-logo-placeholder">TELUS HEALTH</div>
+        <div class="ahp-logo-placeholder">SUSHI SHOP</div>
+        <div class="ahp-logo-placeholder">BORÉA</div>
+        <div class="ahp-logo-placeholder">iA FINANCIAL</div>
+        <div class="ahp-logo-placeholder">MTY GROUP</div>
+        <div class="ahp-logo-placeholder">CANADA DAY</div>
+        <div class="ahp-logo-placeholder">TEDx</div>
+        <div class="ahp-logo-placeholder">MOISSON LAURENTIDES</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ahp-routes">
+    <div class="ahp-routes-inner">
+      <p class="ahp-routes-eyebrow">Where to go next</p>
+      <h2 class="ahp-routes-headline">Two ways the work shows up.</h2>
+      <div class="ahp-route-card">
+        <div class="ahp-route-left">
+          <h3>Need an MC for your event?</h3>
+          <p>Corporate events, galas, conferences, bilingual events across Canada.</p>
+        </div>
+        <div class="ahp-route-right">
+          <button class="ahp-route-link">animateur.ca</button>
+          <button class="ahp-route-link">holdtheroom.com</button>
+        </div>
+      </div>
+      <div class="ahp-route-card">
+        <div class="ahp-route-left">
+          <h3>Want to build your own speaking capacity?</h3>
+          <p>For professionals, executives, and entrepreneurs who want speaking as a learnable skill. Course and coaching.</p>
+        </div>
+        <div class="ahp-route-right">
+          <button class="ahp-route-link">Speaker Academy</button>
+          <button class="ahp-route-link">Académie FR</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ahp-orbit">
+    <div class="ahp-orbit-inner">
+      <h2 class="ahp-orbit-headline">Not ready to work together yet?<br/>Stay in orbit.</h2>
+      <p class="ahp-orbit-sub">A few times a month. Short notes on communication, design, and what I'm noticing across rooms. Nothing you'd call a newsletter &mdash; more like a working journal.</p>
+      <div class="ahp-orbit-form">
+        <input class="ahp-orbit-input" type="email" placeholder="your@email.com" />
+        <button class="ahp-btn ahp-btn-primary">Subscribe</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ahp-footer">
+    &copy; 2026 ANTHONY HORNG &middot; MONTRÉAL &middot; LINKEDIN &middot; INSTAGRAM &middot; YOUTUBE
+    <div class="ahp-footer-lang">EN &middot; <a style="color:#8ab5a8; text-decoration:underline;">FR</a></div>
+  </footer>
+
+</div>
+</body>
+</html>

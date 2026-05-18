@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthony Horng — Umbrella Language-First Router (Prototype 2) — Design Study 2026-04-19</title>
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-secondary: #f1efe8;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  body { margin: 0; padding: 2rem; background: #e8e4da; font-family: var(--font-sans); }
+  .ahu-wrap { font-family: var(--font-sans); color: var(--color-text-primary); line-height: 1.6; max-width: 960px; margin: 0 auto; background: #fff; border-radius: var(--border-radius-md); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .ahu-wrap * { box-sizing: border-box; }
+  .ahu-topbar { background: #0a0a0a; color: #d4d0c8; padding: 10px 20px; font-size: 11px; letter-spacing: 0.1em; text-align: center; }
+  .ahu-hero { background: #0a2e26; color: #f4f1ea; padding: 3.5rem 2rem 3rem; text-align: center; position: relative; }
+  .ahu-hero-eyebrow { font-size: 11px; letter-spacing: 0.25em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 1.25rem; }
+  .ahu-hero-wordmark { font-family: var(--font-serif); font-size: 64px; font-weight: 500; letter-spacing: -0.02em; line-height: 1; margin: 0 0 0.5rem; color: #f4f1ea; }
+  .ahu-hero-wordmark-last { color: #8ab5a8; }
+  .ahu-hero-tagline { font-size: 20px; font-weight: 400; line-height: 1.4; max-width: 540px; margin: 0 auto 2.5rem; color: #d4d0c8; }
+  .ahu-lang-router { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 520px; margin: 0 auto; }
+  .ahu-lang-tile { padding: 1.5rem 1.25rem; border: 0.5px solid #8ab5a8; border-radius: var(--border-radius-lg); background: transparent; cursor: pointer; transition: background 0.15s; }
+  .ahu-lang-tile:hover { background: rgba(138, 181, 168, 0.1); }
+  .ahu-lang-code { font-size: 11px; letter-spacing: 0.2em; color: #8ab5a8; margin: 0 0 8px; text-transform: uppercase; }
+  .ahu-lang-label { font-family: var(--font-serif); font-size: 26px; font-weight: 500; color: #f4f1ea; margin: 0 0 6px; }
+  .ahu-lang-sub { font-size: 12px; color: #8ab5a8; margin: 0; }
+  .ahu-thinking-note { background: #fff8e6; border-left: 3px solid #BA7517; padding: 0.85rem 1rem; margin: 0; font-size: 13px; line-height: 1.55; color: #633806; }
+  .ahu-thinking-note strong { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem; color: #854F0B; }
+  .ahu-thinking-note-dark { background: rgba(239, 159, 39, 0.08); border-left: 3px solid #EF9F27; padding: 0.85rem 1rem; margin: 1.5rem auto 0; max-width: 560px; font-size: 13px; line-height: 1.55; color: #FAC775; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; text-align: left; }
+  .ahu-thinking-note-dark strong { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem; color: #EF9F27; }
+  .ahu-section { padding: 3rem 2rem; }
+  .ahu-section-dark { background: #0a0a0a; color: #f4f1ea; padding: 3rem 2rem; }
+  .ahu-eyebrow { font-size: 11px; letter-spacing: 0.2em; color: var(--color-text-secondary); text-transform: uppercase; margin: 0 0 0.75rem; }
+  .ahu-eyebrow-dark { font-size: 11px; letter-spacing: 0.2em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 0.75rem; }
+  .ahu-h2-display { font-family: var(--font-serif); font-size: 38px; font-weight: 500; line-height: 1.1; margin: 0 0 1.5rem; letter-spacing: -0.01em; max-width: 640px; }
+  .ahu-body { font-size: 15px; line-height: 1.65; margin: 0 0 0.85rem; }
+  .ahu-body-dark { font-size: 15px; line-height: 1.65; color: #d4d0c8; margin: 0 0 0.85rem; }
+  .ahu-argument-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; margin-top: 1.5rem; }
+  .ahu-accent-teal { color: #8ab5a8; }
+  .ahu-proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .ahu-proof-card { padding: 1.25rem; background: rgba(255,255,255,0.04); border: 0.5px solid rgba(138, 181, 168, 0.15); border-radius: var(--border-radius-lg); }
+  .ahu-proof-eyebrow { font-size: 10px; letter-spacing: 0.15em; color: #8ab5a8; text-transform: uppercase; margin: 0 0 10px; font-weight: 500; }
+  .ahu-proof-quote { font-family: var(--font-serif); font-size: 15px; line-height: 1.45; margin: 0 0 10px; color: #f4f1ea; font-style: italic; }
+  .ahu-proof-cite { font-size: 11px; color: #8ab5a8; letter-spacing: 0.05em; }
+  .ahu-logo-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 1.5rem; align-items: center; max-width: 720px; }
+  .ahu-logo-placeholder { height: 44px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--color-text-tertiary); letter-spacing: 0.05em; text-align: center; padding: 4px; }
+  .ahu-footer { background: #0a2e26; color: #f4f1ea; padding: 2rem; text-align: center; font-size: 12px; color: #8ab5a8; letter-spacing: 0.05em; }
+  @media (max-width: 640px) {
+    body { padding: 0; }
+    .ahu-argument-grid { grid-template-columns: 1fr; }
+    .ahu-logo-strip { grid-template-columns: repeat(3, 1fr); }
+    .ahu-hero-wordmark { font-size: 44px; }
+    .ahu-hero-tagline { font-size: 17px; }
+    .ahu-h2-display { font-size: 28px; }
+    .ahu-lang-router { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="ahu-wrap">
+
+  <div class="ahu-topbar">ANTHONYHORNG.COM &mdash; UMBRELLA</div>
+
+  <section class="ahu-hero">
+    <p class="ahu-hero-eyebrow">Strategic Host &middot; Story Designer &middot; Impact Speaker</p>
+    <h1 class="ahu-hero-wordmark">Anthony <span class="ahu-hero-wordmark-last">Horng</span></h1>
+    <p class="ahu-hero-tagline">Most MCs live on the stage.<br/>I live in the event.</p>
+
+    <div class="ahu-lang-router">
+      <button class="ahu-lang-tile">
+        <p class="ahu-lang-code">EN</p>
+        <p class="ahu-lang-label">Continue in English</p>
+        <p class="ahu-lang-sub">MC &middot; Speaker Academy &middot; Workshops</p>
+      </button>
+      <button class="ahu-lang-tile">
+        <p class="ahu-lang-code">FR</p>
+        <p class="ahu-lang-label">Continuer en français</p>
+        <p class="ahu-lang-sub">Animation &middot; Académie &middot; Ateliers</p>
+      </button>
+    </div>
+
+    <div class="ahu-thinking-note-dark">
+      <strong>Thinking note &mdash; language-first router</strong>
+      This is the umbrella's real job. Cassandra's site has no router &mdash; she has one offer, one language, one buyer. Your hero is structurally different: it states identity, then branches. The positioning line works here as the argument that makes someone want to branch at all. After the click, they land on a buyer-type router in the chosen language (MC vs. Speaker Academy), then the destination site.
+    </div>
+  </section>
+
+  <section class="ahu-section-dark">
+    <p class="ahu-eyebrow-dark">Who this is</p>
+    <h2 class="ahu-h2-display">20+ years holding rooms <span class="ahu-accent-teal">across every industry</span> you can think of.</h2>
+    <div class="ahu-argument-grid">
+      <div>
+        <p class="ahu-body-dark">Combat sports. Construction summits. Financial services. Corporate franchise conventions. Telecom. Philanthropic galas. Weddings. Virtual summits during the pandemic years.</p>
+        <p class="ahu-body-dark">Not one domain expertise. Communication was the only credential. That pattern &mdash; across 20+ years &mdash; is the argument.</p>
+      </div>
+      <div>
+        <p class="ahu-body-dark">The MC who enters the system rather than managing it from outside.</p>
+        <p class="ahu-body-dark ahu-accent-teal" style="font-weight: 500;">Not a runsheet executor. A condition designer.</p>
+        <p class="ahu-body-dark" style="font-size: 13px; color: #8ab5a8;">CED Level 3 &mdash; Certified Event Designer</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ahu-section-dark" style="padding-top: 0;">
+    <p class="ahu-eyebrow-dark">The work</p>
+    <h2 class="ahu-h2-display">What clients say after the room.</h2>
+    <div class="ahu-proof-grid">
+      <div class="ahu-proof-card">
+        <p class="ahu-proof-eyebrow">On listening</p>
+        <p class="ahu-proof-quote">"Tu écoutes réellement ce qui se passe sur scène pour être capable après ça de ressortir les éléments. C'est un gros point de différenciateur."</p>
+        <p class="ahu-proof-cite">CHANELLE TURGEON GERVAIS &middot; BORÉA CONSTRUCTION</p>
+      </div>
+      <div class="ahu-proof-card">
+        <p class="ahu-proof-eyebrow">On trust</p>
+        <p class="ahu-proof-quote">"After interviewing many professionals, I selected Anthony because of his professionalism, humble attitude, intellect, and his ability to energize the room."</p>
+        <p class="ahu-proof-cite">LINKEDIN RECOMMENDATION</p>
+      </div>
+      <div class="ahu-proof-card">
+        <p class="ahu-proof-eyebrow">On carrying the room</p>
+        <p class="ahu-proof-quote">"Son énergie contagieuse, son sens du timing et sa capacité à capter l'attention ont grandement contribué au succès de l'événement."</p>
+        <p class="ahu-proof-cite">MOISSON LAURENTIDES &middot; LE GRAND BEDON</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ahu-section">
+    <p class="ahu-eyebrow">Trusted by</p>
+    <div class="ahu-logo-strip">
+      <div class="ahu-logo-placeholder">MUDGIRL</div>
+      <div class="ahu-logo-placeholder">SKILLS CANADA</div>
+      <div class="ahu-logo-placeholder">TELUS HEALTH</div>
+      <div class="ahu-logo-placeholder">SUSHI SHOP</div>
+      <div class="ahu-logo-placeholder">BORÉA</div>
+      <div class="ahu-logo-placeholder">iA FINANCIAL</div>
+      <div class="ahu-logo-placeholder">TEDx</div>
+      <div class="ahu-logo-placeholder">CANADA DAY</div>
+      <div class="ahu-logo-placeholder">MTY GROUP</div>
+      <div class="ahu-logo-placeholder">MOISSON LAURENTIDES</div>
+    </div>
+    <div class="ahu-thinking-note" style="margin-top: 2rem; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;">
+      <strong>Thinking note &mdash; what's NOT on this page</strong>
+      No service menu. No three-product row. No "book me" form. No individual keynote topics. No course landing. The umbrella doesn't sell &mdash; it routes. Every selling conversation happens on the destination site in the chosen language. The umbrella's only conversion event is the language click.
+    </div>
+  </section>
+
+  <footer class="ahu-footer">
+    &copy; 2026 ANTHONY HORNG &middot; MONTRÉAL
+  </footer>
+
+</div>
+</body>
+</html>
